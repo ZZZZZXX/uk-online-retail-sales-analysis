@@ -58,15 +58,29 @@ data/online_retail.xlsx
 
 ## Key Results
 
-- Raw dataset size: 541,909 transaction rows
-- Cleaned dataset size: 397,884 valid transaction records
-- Total revenue: approximately £8.91M
-- Total orders: 18,532
-- Total customers: 4,338
-- Total products: 3,665
-- Sales increased significantly from September to November 2011 and peaked in November 2011
-- Growth was mainly driven by increased order volume and active customer activity
-- Using StockCode as the product identifier, the top 20% of products contributed 78.65% of total revenue.
+The following figures are from the **early customer-identified transaction subset**, not all 541,909 invoice lines. That subset retained rows with `Quantity > 0`, `UnitPrice > 0`, and a non-null `CustomerID`.
+
+- Raw dataset size: **541,909** invoice lines
+- Early eligible-sales subset: **397,884** lines
+- Recorded sales value within that subset (`Quantity × UnitPrice`): **£8,911,407.90** (not audited revenue)
+- Distinct invoices: **18,532**; identified customers: **4,338**
+- Distinct `StockCode` values before special-code exclusions: **3,665**
+- September–November 2011 showed stronger recorded sales, order counts and active-customer activity; December 2011 is incomplete. These are descriptive observations, not established causal effects.
+
+### Why the portfolio shows 78.65% and 78.38%
+
+The **same early transaction filters** support two historical product-code analyses. The difference is which `StockCode` values enter the ranking and its denominator:
+
+| Definition | Codes in ranking | Top 20% count (rounded up) | Share of sales value in that ranking | Reproducible evidence |
+| --- | ---: | ---: | ---: | --- |
+| All `StockCode` values, including postage / service-like entries | 3,665 | 733 | **78.65%** | [Historical root notebook, saved output](https://github.com/ZZZZZXX/uk-online-retail-sales-analysis/blob/41ec18ec80a17b9243cfc22edca37c310b312439/01_data_loading.ipynb) |
+| Exclude nine predefined non-merchandise / special-code labels (only some occur in the subset) | 3,660 | 732 | **78.38%** | [Current `notebooks/01_data_loading.ipynb`](notebooks/01_data_loading.ipynb) |
+
+The exclusions in the second definition are `POST`, `M`, `D`, `DOT`, `BANK CHARGES`, `AMAZONFEE`, `CRUK`, `C2`, and `S`. These are **different definitions of what counts as a product code**, not conflicting arithmetic. The current notebook saves **78.38%**; the historical root notebook (later removed as a duplicate file) saves **78.65%**.
+
+A [separate, later reconciled descriptive analysis](https://github.com/ZZZZZXX/-uci-online-retail-business-analytics) reports **78.32%** for the top 20% of **3,790 normalised merchandise codes**. It uses revised sale eligibility and code-normalisation rules, so **78.32% is not a like-for-like recomputation** of the two early results. It also documents that sales lines with missing customer identity represent **16.49% of gross completed-sales value** under its revised definition.
+
+**Interpretation:** Sales are concentrated in a relatively small group of codes. This alone does **not** establish profit contribution, optimal inventory levels, or the effect of changing assortment; the source has no cost, margin or stock data.
 
 ## Visualizations
 
@@ -102,13 +116,12 @@ data/online_retail.xlsx
 
 ![Cumulative Customer Sales Contribution](images/cumulative_customer_sales_contribution.png)
 
-## Business Recommendations
+## Business questions for further investigation (not implemented recommendations)
 
-- Prepare inventory, logistics, and marketing campaigns before the September to November peak season.
-- Prioritize stock availability for high-revenue products because revenue is concentrated among a smaller group of products.
-- Use high-volume, low-price products to support traffic, bundle offers, and repeat purchases.
-- Monitor high-value customers and frequent buyers with retention-focused campaigns.
-- Treat December 2011 carefully in trend comparisons because the dataset only includes partial December data.
+- Test whether the observed September–November increase repeats in additional years before using it for inventory or logistics planning.
+- Investigate stock availability for high-sales-value products **after obtaining cost, margin, stock and fulfilment data**; concentration alone does not justify inventory allocation.
+- Evaluate bundles and repeat purchasing as hypotheses using appropriate basket, customer and outcome data; these effects were **not measured** in this descriptive project.
+- Treat the incomplete December 2011 period separately from full-month comparisons.
 
 ## How to Run
 
@@ -127,11 +140,12 @@ pip install -r requirements.txt
 jupyter lab notebooks/01_data_loading.ipynb
 ```
 
-Running the notebook recreates the local Excel dashboard output under `output/`.
+The notebook exports the filtered data table to a workbook named `Online_Retail_Dashboard.xlsx` in its working directory. **That export is a flat worksheet, not the full multi-sheet dashboard.** An initial Excel dashboard was created separately during the project and is not included as a reproducible artifact in this early GitHub repository. The [later reconciled project](https://github.com/ZZZZZXX/-uci-online-retail-business-analytics) includes a more extensive dashboard and its own documented workflow.
 
 ## Limitations
 
-- Canceled orders, returns, missing-customer transactions, and non-positive-price records are excluded from the cleaned sales analysis.
+- The early `df_clean` subset excludes non-positive quantities / prices and missing-`CustomerID` rows, so its sales-value figures do **not** cover all completed sales. Customer-ID exclusions are not appropriate for every product-level question.
+- Treating all `StockCode` values as merchandise leads to 78.65%; excluding predefined non-product codes leads to 78.38%. Neither percentage is a universal property of the raw data without its definition.
+- The later reconciled project's 78.32% uses different transaction and normalised merchandise definitions; it should not be presented as the direct impact of a single filter.
 - December 2011 is a partial month and should not be compared directly with full months.
-- Product contribution was calculated using StockCode as the product identifier. Results may vary slightly if products are grouped by Description or by StockCode-Description pairs.
-- This project does not include predictive models; it is scoped to descriptive business analysis.
+- The dataset lacks costs, margins, stock availability, order fulfilment and experimental outcomes. These analyses are descriptive, not evidence of profitability, causal effects, forecasts or completed inventory optimisation.
