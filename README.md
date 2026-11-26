@@ -51,10 +51,24 @@ data/online_retail.xlsx
 │   ├── cumulative_product_sales_contribution.png
 │   └── cumulative_customer_sales_contribution.png
 ├── report/
-│   └── UK_Online_Retail_Report.docx
+│   └── UCI ONLINE RETAIL REPORT.docx
 └── docs/
     └── project_summary.md
 ```
+
+## Project files and Excel dashboard
+
+The original analysis was carried out in Python and pandas and documented in a notebook and a written report. An **initial Excel dashboard was also prepared separately**, but that original dashboard workbook has not been uploaded to this repository. The later, more complete dashboard below comes from an **AI-assisted reconciliation**, not the original independently written notebook.
+
+| Deliverable | Where to view it | Scope |
+| --- | --- | --- |
+| Original Pareto calculation (78.65%) | [Historical notebook with saved output](https://github.com/ZZZZZXX/uk-online-retail-sales-analysis/blob/41ec18ec80a17b9243cfc22edca37c310b312439/01_data_loading.ipynb) | Original Python/pandas analysis; all 3,665 StockCodes were included, including some postage and service codes. |
+| Current early-project notebook | [Jupyter notebook](notebooks/01_data_loading.ipynb) | An early-analysis variant excluding specific service codes from the ranking; it reports 78.38%. |
+| Written project report | [UCI ONLINE RETAIL REPORT.docx](report/UCI%20ONLINE%20RETAIL%20REPORT.docx) | Report available in this repository. |
+| Published Excel dashboard | [View Excel dashboard in the later reconciled repository](https://github.com/ZZZZZXX/-uci-online-retail-business-analytics/blob/main/output/Online_Retail_Dashboard.xlsx) | Publicly available, later AI-assisted expanded dashboard; **not identical to the initial independently created workbook**. |
+| Revised concentration (78.32%) | [Later reconciled analysis](https://github.com/ZZZZZXX/-uci-online-retail-business-analytics) | Different completed-sale eligibility and normalised merchandise-code rules. |
+
+This distinction matters when using the portfolio for applications: the original analysis, written report, initial Excel work, and later AI-assisted reconciliation should not be presented as one independently authored code pipeline.
 
 ## Key Results
 
@@ -140,7 +154,7 @@ pip install -r requirements.txt
 jupyter lab notebooks/01_data_loading.ipynb
 ```
 
-The notebook exports the filtered data table to a workbook named `Online_Retail_Dashboard.xlsx` in its working directory. **That export is a flat worksheet, not the full multi-sheet dashboard.** An initial Excel dashboard was created separately during the project and is not included as a reproducible artifact in this early GitHub repository. The [later reconciled project](https://github.com/ZZZZZXX/-uci-online-retail-business-analytics) includes a more extensive dashboard and its own documented workflow.
+The notebook exports the filtered data table to a workbook named `Online_Retail_Dashboard.xlsx` in its working directory. **That export is a flat worksheet, not the full multi-sheet dashboard.** The separately created original Excel dashboard is not hosted here. A [later AI-assisted reconciled dashboard](https://github.com/ZZZZZXX/-uci-online-retail-business-analytics/blob/main/output/Online_Retail_Dashboard.xlsx) is publicly available, with its own documented workflow; it should not be mistaken for the initial workbook.
 
 ## Limitations
 
